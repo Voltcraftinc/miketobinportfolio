@@ -1,0 +1,93 @@
+/* FooterBar.css */
+
+/* The main footer bar pinned at bottom, hidden by default. */
+.footer-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Adjust the footer's height if you need. 
+       The banner image itself can define the visible size. */
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 9999;
+    display: flex; /* centers .footer-content horizontally */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Slide up on .show */
+  .footer-bar.show {
+    transform: translateY(0);
+  }
+  
+  /* 
+     Container that holds the banner and the icons. 
+     We let the banner define the height. 
+  */
+  .footer-content {
+    position: relative;
+  }
+  
+  /* The big banner image at the bottom. 
+     Adjust size to your preference. 
+  */
+  .footer-banner-img {
+    display: block;
+    width: 100%; /* or '100%', or any fixed size you like */
+    height: auto;
+    /* object-fit if you want to control how it scales/crops 
+       but usually not needed if using width x auto. */
+  }
+  
+  /* 
+     The layer for icons on top of the banner. 
+     We set position: absolute; full size so we can place icons freely.
+  */
+  .footer-icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Each icon is absolutely positioned. 
+     We'll define one class .footer-icon + a unique class for each icon 
+     so you can set each icon's position easily.
+  */
+  .footer-icon {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+  }
+  
+  .footer-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  /* Example positions for each icon. Tweak top/left to move them around. */
+
+  
+  
+  /* LinkedIn icon position */
+  .footer-icon-linkedin {
+    top: 180px;  /* change these to move it around */
+    left: 200px;
+  }
+  
+  /* Twitter icon position */
+  .footer-icon-twitter {
+    top: 180px;
+    left: 300px;
+  }
+  
+  /* Instagram icon position */
+  .footer-icon-instagram {
+    top: 180px;
+    left: 250px;
+  }
+  
