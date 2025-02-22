@@ -20,15 +20,10 @@ function DraggableCanvas({ images, onImageClick }) {
   const MAX_SCALE = 3;
 
   // *** Calculate total bounding box size ***
-  // e.g. 21 * 141 wide = 2961
-  // e.g. 21 * 200 tall = 4200
   const TOTAL_WIDTH = GRID_SIZE * CELL_WIDTH;
   const TOTAL_HEIGHT = GRID_SIZE * CELL_HEIGHT;
 
   // ~~~~~~~~~~~~~~~~~~ STATE ~~~~~~~~~~~~~~~~~~
-  // We keep a "target" position and scale, and a "current" position and scale,
-  // then smoothly animate "current" to "target" in rAF → reduces jitter.
-
   const [currentPos, setCurrentPos] = useState({ x: 0, y: 0 });
   const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
   const [currentScale, setCurrentScale] = useState(1);
@@ -38,6 +33,7 @@ function DraggableCanvas({ images, onImageClick }) {
   const draggingRef = useRef(false);
 
   // ~~~~~~~~~~~~~~~~~~ RANDOM GRID ITEMS ~~~~~~~~~~~~~~~~~~
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const gridItems = useMemo(() => {
     const items = [];
     for (let row = -HALF_GRID; row <= HALF_GRID; row++) {
@@ -56,22 +52,18 @@ function DraggableCanvas({ images, onImageClick }) {
     return items;
   }, [images]);
 
-  // ~~~~~~~~~~~~~~~~~~ MIN SCALE (so entire grid fills screen) ~~~~~~~~~~~~~~~~~~
-  // We want to prevent zooming out so far that we see outside the grid.
-  // That means the entire bounding box must be at least as big as the screen.
-  // minScale = max( screenWidth / TOTAL_WIDTH, screenHeight / TOTAL_HEIGHT ).
-  const [minScale, setMinScale] = useState(0.2); // fallback
+  // ~~~~~~~~~~~~~~~~~~ MIN SCALE ~~~~~~~~~~~~~~~~~~
+  const [minScale, setMinScale] = useState(0.2);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     function calcMinScale() {
       const sw = window.innerWidth;
       const sh = window.innerHeight;
       const neededX = sw / TOTAL_WIDTH;
       const neededY = sh / TOTAL_HEIGHT;
-      // whichever is larger ensures no empty space
       const ms = Math.max(neededX, neededY, 0.2);
       setMinScale(ms);
-      // also clamp target scale if it's below ms
       setTargetScale((s) => (s < ms ? ms : s));
     }
 
@@ -81,12 +73,13 @@ function DraggableCanvas({ images, onImageClick }) {
   }, []);
 
   // ~~~~~~~~~~~~~~~~~~ RAF LOOP FOR SMOOTHNESS ~~~~~~~~~~~~~~~~~~
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let rafId;
     function animate() {
       // LERP between currentPos -> targetPos for less jitter
       setCurrentPos((pos) => {
-        const lerpFactor = 0.3; // bigger → snappier, smaller → smoother
+        const lerpFactor = 0.3;
         const nx = pos.x + (targetPos.x - pos.x) * lerpFactor;
         const ny = pos.y + (targetPos.y - pos.y) * lerpFactor;
         return { x: nx, y: ny };
@@ -103,13 +96,10 @@ function DraggableCanvas({ images, onImageClick }) {
   }, [targetPos, targetScale]);
 
   // ~~~~~~~~~~~~~~~~~~ EVENT HANDLERS ~~~~~~~~~~~~~~~~~~
-
-  // pointer down
   function onPointerDown(e) {
     e.preventDefault();
     draggingRef.current = true;
 
-    // store pointer coords for click vs drag check
     pointerDownRef.current = {
       startX: e.clientX,
       startY: e.clientY,
@@ -118,11 +108,9 @@ function DraggableCanvas({ images, onImageClick }) {
     };
   }
 
-  // pointer move
   function onPointerMove(e) {
     if (!draggingRef.current) return;
 
-    // see if user moved enough to consider it a drag
     if (!pointerDownRef.current.moved) {
       const dx = e.clientX - pointerDownRef.current.startX;
       const dy = e.clientY - pointerDownRef.current.startY;
@@ -131,8 +119,7 @@ function DraggableCanvas({ images, onImageClick }) {
       }
     }
 
-    // apply the movement to targetPos directly
-    const dx = e.movementX || 0; 
+    const dx = e.movementX || 0;
     const dy = e.movementY || 0;
     setTargetPos((pos) => ({
       x: pos.x + dx,
@@ -140,12 +127,9 @@ function DraggableCanvas({ images, onImageClick }) {
     }));
   }
 
-  // pointer up
   function onPointerUp(e) {
     draggingRef.current = false;
-    // if not moved => it's a click
     if (!pointerDownRef.current.moved) {
-      // if they tapped an image, open Lightbox
       if (pointerDownRef.current.target?.tagName === "IMG") {
         const imgSrc = pointerDownRef.current.target.src;
         onImageClick(imgSrc);
@@ -153,13 +137,11 @@ function DraggableCanvas({ images, onImageClick }) {
     }
   }
 
-  // wheel zoom
   function onWheel(e) {
     e.preventDefault();
     const delta = -e.deltaY * 0.001;
     setTargetScale((prev) => {
       let next = prev + delta;
-      // clamp scale
       if (next < minScale) next = minScale;
       if (next > MAX_SCALE) next = MAX_SCALE;
       return next;
@@ -167,6 +149,7 @@ function DraggableCanvas({ images, onImageClick }) {
   }
 
   // ~~~~~~~~~~~~~~~~~~ SETUP LISTENERS ~~~~~~~~~~~~~~~~~~
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const el = document.getElementById("canvas-root");
     if (!el) return;
@@ -182,7 +165,7 @@ function DraggableCanvas({ images, onImageClick }) {
       el.removeEventListener("pointerup", onPointerUp);
       el.removeEventListener("wheel", onWheel);
     };
-  }, [onImageClick, minScale]); // safe to ignore other deps
+  }, [onImageClick, minScale]);
 
   // ~~~~~~~~~~~~~~~~~~ RENDER ~~~~~~~~~~~~~~~~~~
   return (
@@ -191,7 +174,7 @@ function DraggableCanvas({ images, onImageClick }) {
       style={{
         width: "100%",
         height: "100%",
-        touchAction: "none", // mobile dragging
+        touchAction: "none",
         userSelect: "none",
         cursor: draggingRef.current ? "grabbing" : "grab",
         position: "relative",
