@@ -1,5 +1,5 @@
 // src/DraggableCanvas.js
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 
 /**
  * A smoother, less jittery draggable canvas with:
@@ -11,15 +11,14 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
  */
 function DraggableCanvas({ images, onImageClick }) {
   // ~~~~~~~~~~~~~~~~~~ CONFIG ~~~~~~~~~~~~~~~~~~
-  const GRID_SIZE = 21;          // 21x21 = 441 cells
-  const HALF_GRID = 10;          // from row/col = -10..10
-  const CELL_WIDTH = 141;        // forced portrait width
-  const CELL_HEIGHT = 200;       // forced portrait height
-  const SPACING_X = CELL_WIDTH;  // horizontal distance between cells
-  const SPACING_Y = CELL_HEIGHT; // vertical distance
+  const GRID_SIZE = 21;
+  const HALF_GRID = 10;
+  const CELL_WIDTH = 141;
+  const CELL_HEIGHT = 200;
+  const SPACING_X = CELL_WIDTH;
+  const SPACING_Y = CELL_HEIGHT;
   const MAX_SCALE = 3;
 
-  // *** Calculate total bounding box size ***
   const TOTAL_WIDTH = GRID_SIZE * CELL_WIDTH;
   const TOTAL_HEIGHT = GRID_SIZE * CELL_HEIGHT;
 
@@ -28,12 +27,12 @@ function DraggableCanvas({ images, onImageClick }) {
   const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
   const [currentScale, setCurrentScale] = useState(1);
   const [targetScale, setTargetScale] = useState(1);
+  const [minScale, setMinScale] = useState(0.2);
 
-  const pointerDownRef = useRef(null); // for click vs drag detection
+  const pointerDownRef = useRef(null);
   const draggingRef = useRef(false);
 
-  // ~~~~~~~~~~~~~~~~~~ RANDOM GRID ITEMS ~~~~~~~~~~~~~~~~~~
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // ~~~~~~~~~~~~~~~~~~ FIX: ADDED MISSING DEPENDENCIES ~~~~~~~~~~~~~~~~~~
   const gridItems = useMemo(() => {
     const items = [];
     for (let row = -HALF_GRID; row <= HALF_GRID; row++) {
@@ -50,12 +49,9 @@ function DraggableCanvas({ images, onImageClick }) {
       }
     }
     return items;
-  }, [images]);
+  }, [images, SPACING_X, SPACING_Y]);
 
-  // ~~~~~~~~~~~~~~~~~~ MIN SCALE ~~~~~~~~~~~~~~~~~~
-  const [minScale, setMinScale] = useState(0.2);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // ~~~~~~~~~~~~~~~~~~ FIX: ADDED MISSING DEPENDENCIES ~~~~~~~~~~~~~~~~~~
   useEffect(() => {
     function calcMinScale() {
       const sw = window.innerWidth;
@@ -70,45 +66,39 @@ function DraggableCanvas({ images, onImageClick }) {
     calcMinScale();
     window.addEventListener("resize", calcMinScale);
     return () => window.removeEventListener("resize", calcMinScale);
-  }, []);
+  }, [TOTAL_WIDTH, TOTAL_HEIGHT]);
 
   // ~~~~~~~~~~~~~~~~~~ RAF LOOP FOR SMOOTHNESS ~~~~~~~~~~~~~~~~~~
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let rafId;
     function animate() {
-      // LERP between currentPos -> targetPos for less jitter
       setCurrentPos((pos) => {
         const lerpFactor = 0.3;
-        const nx = pos.x + (targetPos.x - pos.x) * lerpFactor;
-        const ny = pos.y + (targetPos.y - pos.y) * lerpFactor;
-        return { x: nx, y: ny };
+        return {
+          x: pos.x + (targetPos.x - pos.x) * lerpFactor,
+          y: pos.y + (targetPos.y - pos.y) * lerpFactor,
+        };
       });
-      setCurrentScale((sc) => {
-        const lerpFactor = 0.3;
-        const nsc = sc + (targetScale - sc) * lerpFactor;
-        return nsc;
-      });
+      setCurrentScale((sc) => sc + (targetScale - sc) * 0.3);
       rafId = requestAnimationFrame(animate);
     }
     rafId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafId);
   }, [targetPos, targetScale]);
 
-  // ~~~~~~~~~~~~~~~~~~ EVENT HANDLERS ~~~~~~~~~~~~~~~~~~
-  function onPointerDown(e) {
+  // ~~~~~~~~~~~~~~~~~~ FIX: ADDED MISSING DEPENDENCIES ~~~~~~~~~~~~~~~~~~
+  const onPointerDown = useCallback((e) => {
     e.preventDefault();
     draggingRef.current = true;
-
     pointerDownRef.current = {
       startX: e.clientX,
       startY: e.clientY,
       moved: false,
       target: e.target,
     };
-  }
+  }, []);
 
-  function onPointerMove(e) {
+  const onPointerMove = useCallback((e) => {
     if (!draggingRef.current) return;
 
     if (!pointerDownRef.current.moved) {
@@ -125,9 +115,9 @@ function DraggableCanvas({ images, onImageClick }) {
       x: pos.x + dx,
       y: pos.y + dy,
     }));
-  }
+  }, []);
 
-  function onPointerUp(e) {
+  const onPointerUp = useCallback((e) => {
     draggingRef.current = false;
     if (!pointerDownRef.current.moved) {
       if (pointerDownRef.current.target?.tagName === "IMG") {
@@ -135,9 +125,9 @@ function DraggableCanvas({ images, onImageClick }) {
         onImageClick(imgSrc);
       }
     }
-  }
+  }, [onImageClick]);
 
-  function onWheel(e) {
+  const onWheel = useCallback((e) => {
     e.preventDefault();
     const delta = -e.deltaY * 0.001;
     setTargetScale((prev) => {
@@ -146,10 +136,9 @@ function DraggableCanvas({ images, onImageClick }) {
       if (next > MAX_SCALE) next = MAX_SCALE;
       return next;
     });
-  }
+  }, [minScale]);
 
-  // ~~~~~~~~~~~~~~~~~~ SETUP LISTENERS ~~~~~~~~~~~~~~~~~~
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // ~~~~~~~~~~~~~~~~~~ FIX: ADDED MISSING DEPENDENCIES ~~~~~~~~~~~~~~~~~~
   useEffect(() => {
     const el = document.getElementById("canvas-root");
     if (!el) return;
@@ -165,7 +154,7 @@ function DraggableCanvas({ images, onImageClick }) {
       el.removeEventListener("pointerup", onPointerUp);
       el.removeEventListener("wheel", onWheel);
     };
-  }, [onImageClick, minScale]);
+  }, [onPointerDown, onPointerMove, onPointerUp, onWheel]);
 
   // ~~~~~~~~~~~~~~~~~~ RENDER ~~~~~~~~~~~~~~~~~~
   return (
