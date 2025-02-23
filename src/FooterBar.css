@@ -1,93 +1,127 @@
-/* FooterBar.css */
-
-/* The main footer bar pinned at bottom, hidden by default. */
+/* Footer Bar */
 .footer-bar {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
-    /* Adjust the footer's height if you need. 
-       The banner image itself can define the visible size. */
+    height: 180px;
+    background: #333;
     transform: translateY(100%);
     transition: transform 0.3s ease;
-    z-index: 9999;
-    display: flex; /* centers .footer-content horizontally */
+    display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  /* Slide up on .show */
-  .footer-bar.show {
-    transform: translateY(0);
-  }
-  
-  /* 
-     Container that holds the banner and the icons. 
-     We let the banner define the height. 
-  */
-  .footer-content {
-    position: relative;
-  }
-  
-  /* The big banner image at the bottom. 
-     Adjust size to your preference. 
-  */
-  .footer-banner-img {
-    display: block;
-    width: 100%; /* or '100%', or any fixed size you like */
-    height: auto;
-    /* object-fit if you want to control how it scales/crops 
-       but usually not needed if using width x auto. */
-  }
-  
-  /* 
-     The layer for icons on top of the banner. 
-     We set position: absolute; full size so we can place icons freely.
-  */
-  .footer-icons {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  
-  /* Each icon is absolutely positioned. 
-     We'll define one class .footer-icon + a unique class for each icon 
-     so you can set each icon's position easily.
-  */
-  .footer-icon {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-  }
-  
-  .footer-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  
-  /* Example positions for each icon. Tweak top/left to move them around. */
+    z-index: 9999;
+}
 
-  
-  
-  /* LinkedIn icon position */
-  .footer-icon-linkedin {
-    top: 180px;  /* change these to move it around */
+/* Increase hover area to stop instant hiding */
+.footer-hover-zone {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 250px;  /* Extends hover detection 70px above bar */
+}
+
+/* Show when user hovers */
+.footer-bar.show {
+    transform: translateY(0);
+}
+
+/* Main container */
+.footer-content {
+    width: 100%;
+    max-width: 1400px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+}
+
+/* === Left Side (Headshot & Name) === */
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Headshot */
+.footer-headshot {
+    height: 160px;
+    width: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Name */
+.footer-name {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+    position: absolute;
     left: 200px;
-  }
-  
-  /* Twitter icon position */
-  .footer-icon-twitter {
-    top: 180px;
-    left: 300px;
-  }
-  
-  /* Instagram icon position */
-  .footer-icon-instagram {
-    top: 180px;
-    left: 250px;
-  }
-  
+    bottom: 90px;
+}
+
+/* Social Icons under Name */
+.footer-social {
+    position: absolute;
+    left: 220px;
+    bottom: 40px;
+    display: flex;
+    gap: 10px;
+}
+
+.footer-social img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.footer-social img:hover {
+    transform: scale(1.2);
+}
+
+/* === Categories Section (Each category is CONTAINED in a box) === */
+.footer-sections {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-left: 550px;
+    position: absolute;
+    bottom: 40px;
+}
+
+/* Category Container */
+.footer-section {
+    width: 200px; /* Each category will have this width */
+    text-align: center;
+}
+
+/* Category Title */
+.footer-section h4 {
+    color: white;
+    font-size: 18px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+}
+
+/* Icons inside each category */
+.icon-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Icons */
+.icon-group img {
+    width: 35px;
+    height: 35px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.icon-group img:hover {
+    transform: scale(1.2);
+}
