@@ -1,5 +1,8 @@
 // src/DraggableCanvas.js
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import imagesArray from "./autoImages";
+
+
 
 /**
  * A smoother, less jittery draggable canvas with:
@@ -9,7 +12,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
  * - minimum zoom so you can't zoom out beyond the grid
  * - tap an image to open Lightbox (no big drag)
  */
-function DraggableCanvas({ images, onImageClick }) {
+function DraggableCanvas({ onImageClick }) {
   // ~~~~~~~~~~~~~~~~~~ CONFIG ~~~~~~~~~~~~~~~~~~
   const GRID_SIZE = 21;
   const HALF_GRID = 10;
@@ -23,6 +26,7 @@ function DraggableCanvas({ images, onImageClick }) {
   const TOTAL_HEIGHT = GRID_SIZE * CELL_HEIGHT;
 
   // ~~~~~~~~~~~~~~~~~~ STATE ~~~~~~~~~~~~~~~~~~
+  const [images, setImages] = useState([]);
   const [currentPos, setCurrentPos] = useState({ x: 0, y: 0 });
   const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
   const [currentScale, setCurrentScale] = useState(1);
@@ -32,8 +36,16 @@ function DraggableCanvas({ images, onImageClick }) {
   const pointerDownRef = useRef(null);
   const draggingRef = useRef(false);
 
-  // ~~~~~~~~~~~~~~~~~~ FIX: ADDED MISSING DEPENDENCIES ~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~ LOAD COMPRESSED IMAGES ~~~~~~~~~~~~~~~~~~
+  useEffect(() => {
+    setImages(imagesArray);
+}, []);
+
+
+
+  // ~~~~~~~~~~~~~~~~~~ GRID ITEMS ~~~~~~~~~~~~~~~~~~
   const gridItems = useMemo(() => {
+    if (images.length === 0) return [];
     const items = [];
     for (let row = -HALF_GRID; row <= HALF_GRID; row++) {
       for (let col = -HALF_GRID; col <= HALF_GRID; col++) {
@@ -86,7 +98,7 @@ function DraggableCanvas({ images, onImageClick }) {
     return () => cancelAnimationFrame(rafId);
   }, [targetPos, targetScale]);
 
-  // ~~~~~~~~~~~~~~~~~~ FIX: ADDED MISSING DEPENDENCIES ~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~ POINTER EVENTS ~~~~~~~~~~~~~~~~~~
   const onPointerDown = useCallback((e) => {
     e.preventDefault();
     draggingRef.current = true;
@@ -138,7 +150,7 @@ function DraggableCanvas({ images, onImageClick }) {
     });
   }, [minScale]);
 
-  // ~~~~~~~~~~~~~~~~~~ FIX: ADDED MISSING DEPENDENCIES ~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~ EVENT LISTENERS ~~~~~~~~~~~~~~~~~~
   useEffect(() => {
     const el = document.getElementById("canvas-root");
     if (!el) return;

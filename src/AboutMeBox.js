@@ -3,40 +3,47 @@ import React, { useState, useEffect } from "react";
 import "./AboutMeBox.css";
 
 const aboutMeFacts = [
-  "• Been designing for over 25 years. My spine disagrees with this career choice.",
-  "• Graphic design, UI, branding—if it involves making things look good, I probably overthink it.",
-  "• Been coding for about 3 years. I know enough to build things and enough to make them catastrophically fail.",
-  "• Photoshop, Illustrator, After Effects, Premiere Pro—I spend more time looking at loading bars than making things.",
-  "• Currently working on a few projects. Statistically, at least one of them might actually get finished.",
-  "• UI/UX matters. If you make users suffer, they’ll leave. If you make me suffer, I’ll complain about it for days.",
-  "• If you remember dial-up internet, you already know patience. If you don’t, you probably still have hope.",
-  "• I’ve worked in nightclubs, startups, agencies, and from my bed. Only one of those is ideal.",
-  "• Web3, blockchain, crypto—I’ve built things in that space. Somethings cool, somethings weird.",
-  "• If something looks good but is miserable to use, I’ll fix it. If it looks bad *and* is miserable to use, I’ll judge you.",
-  "• My process: Make it, hate it, redo it, overthink it, finally accept it, then tweak it forever.",
-  "• Nightclub promo graphics taught me one thing—people will read absolutely anything if it glows.",
-  "• If I had a pound for every 'mystery bug' I’ve encountered, I’d have enough money to quit fixing them.",
-  "• I enjoy making things. Whether they’re useful is a separate discussion.",
-  "• I’ll spend hours making a design pixel-perfect, but my own handwriting looks like I’m summoning demons.",
-  "• Dark mode is superior. If you use light mode, I assume you’re a functional human being. I am not.",
-  "• Fonts matter. If you use Comic Sans, I assume you have nothing to lose.",
-  "• I could be working on a new project, or I could be staring at my screen wondering why my code suddenly stopped working.",
-  "• There’s a fine line between ‘debugging’ and ‘creating a new problem.’ I cross that line daily.",
-  "• If I ever say 'one last tweak,' I’m definitely lying.",
-  "• I can design a website, write some code, and build a game, but I still somehow burn toast.",
-  "• I explain things like you're five, because half the time, I also need them explained to me that way.",
-  "• The only thing stopping me from throwing my computer out of the window is the fact that I need it to fix the problem.",
-  "• If a project is going too smoothly, I get suspicious. And then something breaks.",
-  "• ‘This will only take five minutes’ is the biggest lie in tech.",
-  "• If the fonts aren’t kerned properly, I will see it. And I will suffer.",
-  "• Everything is a ‘simple project’ until I actually start working on it.",
-  "• My hobbies include making things and regretting making things.",
-  "• If you think ‘how hard could it be?’, you have already made a mistake.",
-  "• I once tried to take a break from projects. That became a project.",
-  "• Half my job is making things work. The other half is pretending they were always meant to work that way.",
-  "• Every day, I discover a new way to break something I just fixed.",
-];
+  "• 25+ years in design. My spine regrets this career choice daily.",
+  "• UI, branding, typography—if it involves making things look good, I care about it. Probably too much.",
+  "• Coding for 3 years. I can build things. I can also break them in ways I didn’t think were possible.",
+  "• Photoshop, Illustrator, After Effects, Premiere Pro—spent half my life staring at progress bars.",
+  "• Currently juggling multiple projects. Odds are, at least one will make it out alive.",
+  "• UI/UX should make sense. If your design makes people suffer, they’ll leave. If it makes *me* suffer, I’ll never shut up about it.",
+  "• If you survived dial-up, you’ve already experienced true pain.",
+  "• I’ve worked in agencies, startups, clubs, and at home. Only one of those lets me wear pajama bottoms.",
+  "• Web3, blockchain, crypto—I’ve built things in that world. Some were useful. Some were… experiments.",
+  "• If something looks good but works like shit, I fix it. If it looks bad *and* works like shit, I judge it.",
+  "• Design process: Make it, hate it, redo it, overthink it, accept it, then tweak it forever.",
+  "• If it glows and has motion, people will read anything. Nightclub promos taught me that.",
+  "• Every mystery bug has a price. If I got paid per bug, I wouldn’t need to fix them anymore.",
+  "• I make things because I enjoy it. Whether they’re useful is a separate issue.",
+  "• I’ll spend hours making a design pixel-perfect. Meanwhile, my handwriting looks like an exorcism.",
+  "• Dark mode is non-negotiable. Light mode is for people who have their life together. That’s not me.",
+  "• Fonts matter. If you use Comic Sans, I assume you’re beyond saving.",
+  "• Half my time is spent making things. The other half is figuring out why they suddenly stopped working.",
+  "• Debugging is just creative problem-solving. Sometimes too creative.",
+  "• ‘One last tweak’ is never actually the last tweak.",
+  "• I can design, code, and build a game. Somehow, I still manage to burn toast.",
+  "• The only reason my computer hasn’t been thrown out the window is that I need it to fix whatever just broke.",
+  "• If a project is going too smoothly, something is definitely about to break.",
+  "• ‘This will only take five minutes’ is a lie. Every time.",
+  "• Badly kerned fonts haunt me. Adjust your tracking before I do it for you.",
+  "• Everything is a ‘quick project’ until it isn’t.",
+  "• Hobbies: Making things, and then questioning why I started making them.",
+  "• If you’ve ever thought ‘how hard could it be?’, congratulations, you’ve just cursed yourself.",
+  "• I once tried to take a break. That turned into a project.",
+  "• Making things work is only half the job. The other half is pretending they were always meant to work that way.",
+  "• Every day, I find a new way to break something I just fixed.",
 
+  // PROJECT LINKS - Store in a different format for JSX handling
+  { text: "Working on a 2D game, Cosmic Cuddlies. Check it out: ", link: "https://cosmiccuddlies.netlify.app/", label: "Cosmic Cuddlies" },
+  { text: "Also building a 3D MMO version of Cosmic Cuddlies. Early stages, but it's coming: ", link: "https://cosmiccuddliesworld.netlify.app/", label: "Cosmic Cuddlies World" },
+  { text: "Ever played a portfolio? Mine is a fully interactive 2D game: ", link: "https://miketobin-industrywork.netlify.app/", label: "Mike Tobin Industry Work" },
+  { text: "Built Ghost Run, an endless survival game. Try to stay alive: ", link: "https://ghostrun-game.netlify.app/", label: "Ghost Run" },
+  { text: "Doggington—no, not that kind. It’s a memecoin-inspired game: ", link: "https://doggington-game.netlify.app/", label: "Doggington" },
+  { text: "Working with Wavora, a Web3-based project. Check it out: ", link: "https://wavora.netlify.app/", label: "Wavora" },
+  { text: "Cooking up something new with Reciply, a recipe finder based on the ingredients you have to hand.: ", link: "https://reciplyapp.netlify.app/", label: "Reciply" },
+];
 
 function AboutMeBox() {
   const [currentFact, setCurrentFact] = useState(aboutMeFacts[0]);
@@ -50,9 +57,9 @@ function AboutMeBox() {
   }, [currentFact]);
 
   useEffect(() => {
-    if (charIndex < currentFact.length) {
+    if (charIndex < (typeof currentFact === "string" ? currentFact.length : currentFact.text.length)) {
       const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + currentFact[charIndex]);
+        setDisplayedText((prev) => prev + (typeof currentFact === "string" ? currentFact[charIndex] : currentFact.text[charIndex]));
         setCharIndex((prev) => prev + 1);
       }, 50);
       return () => clearTimeout(timeout);
@@ -67,14 +74,25 @@ function AboutMeBox() {
         } while (newFact === prevFact); // Ensures a different fact
         return newFact;
       });
-    }, 8000);
+    }, 5000);
 
     return () => clearTimeout(factTimeout);
   }, [charIndex, currentFact]);
 
   return (
     <div className="about-me-box">
-      <p>{displayedText}</p>
+      {typeof currentFact === "string" ? (
+        <p>{displayedText}</p>
+      ) : (
+        <p>
+          {displayedText}
+          {charIndex >= currentFact.text.length && (
+            <a href={currentFact.link} target="_blank" rel="noopener noreferrer">
+              {currentFact.label}
+            </a>
+          )}
+        </p>
+      )}
     </div>
   );
 }

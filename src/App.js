@@ -4,9 +4,12 @@ import DraggableCanvas from "./DraggableCanvas";
 import Lightbox from "./Lightbox";
 import FooterBar from "./FooterBar"; // <-- import the footer
 import imagesArray from "./autoImages";
+
 import "./App.css";
 import MaintenanceBanner from "./MaintenanceBanner";
 import AboutMeBox from "./AboutMeBox";
+
+
 
 function App() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
