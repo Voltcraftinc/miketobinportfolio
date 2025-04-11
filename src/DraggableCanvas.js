@@ -351,28 +351,8 @@ function EnhancedDraggableCanvas({ onImageClick }) {
                 }}
                 onDragStart={(e) => e.preventDefault()}
               />
-              {isHovered && (
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    padding: "10px",
-                    background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)",
-                    color: "white",
-                    borderBottomLeftRadius: "8px",
-                    borderBottomRightRadius: "8px",
-                    fontFamily: "system-ui, -apple-system, sans-serif",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-                    pointerEvents: "none",
-                  }}
-                >
-                  Image {item.row}, {item.col}
-                </div>
-              )}
+            
+              
             </div>
           );
         })}
