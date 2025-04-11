@@ -1,0 +1,45 @@
+/* Main Box */
+.about-me-box {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 9999;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    width: 300px;  /* Fixed width */
+    height: 70px;  /* Fixed height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Text Auto-Scaling */
+.about-me-box p {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.2;
+    font-size: min(16px, 4vw);  /* Scales within the box */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Typing Effect */
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.about-me-box::after {
+    content: "|";
+    margin-left: 5px;
+    animation: blink 0.8s infinite;
+}

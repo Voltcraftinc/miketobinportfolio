@@ -1,0 +1,32 @@
+/* App.css */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: sans-serif;
+  user-select: none; /* Disable text highlighting */
+}
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+}
+
+.canvas-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.canvas-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.canvas-image:hover {
+  transform: scale(1.05);
+}

@@ -1,0 +1,31 @@
+/* App.css (or styles.css) */
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Hide scrollbars if the canvas is huge */
+  font-family: sans-serif;
+}
+
+.canvas-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff; /* blank white canvas */
+  position: relative;
+}
+
+.canvas-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.canvas-image:hover {
+  transform: scale(1.05);
+}
+
+/* Lightbox styling is mostly inline, but you could add extras if needed: */
+.lightbox-overlay img {
+  border: 2px solid #fff;
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
